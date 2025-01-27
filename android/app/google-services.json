@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1028205197135",
+    "project_id": "shortz-79eab",
+    "storage_bucket": "shortz-79eab.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1028205197135:android:cf3dfe8e21a0d2785bb73a",
+        "android_client_info": {
+          "package_name": "com.retrytech.bubbly"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxJg4fZTj18gfSzSYGrC0ssabf-XUgLxk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

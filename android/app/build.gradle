@@ -35,6 +35,12 @@ configurations.configureEach {
     }
 }
 
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 android {
     compileSdk 35
     namespace 'com.retrytech.bubbly'
@@ -67,12 +73,20 @@ android {
         }
 
     }
+    signingConfigs {
+        release {
+            keyAlias = keystoreProperties['keyAlias']
+            keyPassword = keystoreProperties['keyPassword']
+            storeFile = keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storePassword = keystoreProperties['storePassword']
+        }
+    }
     buildTypes {
         release {
 
             minifyEnabled false
             shrinkResources false
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
         }
     }
 

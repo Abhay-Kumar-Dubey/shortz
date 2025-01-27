@@ -11,9 +11,10 @@ import 'package:bubbly/utils/font_res.dart';
 import 'package:bubbly/utils/my_loading/my_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_thumbnail_video/video_thumbnail.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
+// import 'package:video_thumbnail/video_thumbnail.dart';
 
 import 'image_video_msg_screen.dart';
 
@@ -132,46 +133,47 @@ class AddBtnSheet extends StatelessWidget {
     double sizeInMb = sizeInBytes / (1024 * 1024);
 
     if (sizeInMb <= 15) {
-      await VideoThumbnail.thumbnailFile(video: videos.path).then(
-        (value) {
-          showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            backgroundColor: Colors.transparent,
-            builder: (context) {
-              return ImageVideoMsgScreen(
-                image: value,
-                onIVSubmitClick: ({text}) {
-                  CommonUI.showLoader(context);
-                  ApiService()
-                      .filePath(filePath: File(value ?? ''))
-                      .then((value) {
-                    imageUrl = value.path;
-                  }).then(
-                    (value) {
-                      ApiService().filePath(filePath: videos).then((value) {
-                        videoUrl = value.path;
-                      }).then(
-                        (value) {
-                          fireBaseMsg(
-                              videoPath: videoUrl,
-                              msgType: FirebaseRes.video,
-                              imagePath: imageUrl,
-                              msg: text);
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                        },
-                      );
-                    },
-                  );
-                },
-              );
-            },
-          );
-        },
-      );
+      final thumbnailPath =
+          await VideoThumbnail.thumbnailFile(video: videos.path);
+      if (thumbnailPath != null) {
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          builder: (context) {
+            return ImageVideoMsgScreen(
+              image: thumbnailPath.path,
+              onIVSubmitClick: ({text}) {
+                CommonUI.showLoader(context);
+                ApiService()
+                    .filePath(filePath: File(thumbnailPath.path ?? ''))
+                    .then((value) {
+                  imageUrl = value.path;
+                }).then(
+                  (value) {
+                    ApiService().filePath(filePath: videos).then((value) {
+                      videoUrl = value.path;
+                    }).then(
+                      (value) {
+                        fireBaseMsg(
+                            videoPath: videoUrl,
+                            msgType: FirebaseRes.video,
+                            imagePath: imageUrl,
+                            msg: text);
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                    );
+                  },
+                );
+              },
+            );
+          },
+        );
+      }
     }
+    ;
   }
 }
 
